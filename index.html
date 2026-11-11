@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YongGO 養狗 - App 首頁</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 FontAwesome 圖標 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts 圓潤字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#2f5537', // 主色 墨綠
+                            light: '#e4edd1',   // 輔色 淺粉綠
+                            cream: '#fffcf4',   // 淺粉黃 (背景)
+                            pinkSoft: '#F9D3CE',// 淺粉紅
+                            pink: '#F19689',    // 粉紅 (重要資訊/進度/按鈕)
+                            dark: '#1e3824'
+                        }
+                    },
+                    borderRadius: {
+                        'app': '24px',
+                        'app-sm': '16px'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Zen Maru Gothic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #dce5da;
+            color: #2f5537;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 手機容器規畫 (390px 寬度) */
+        .app-viewport {
+            width: 100%;
+            max-width: 390px;
+            min-height: 100vh;
+            margin: 0 auto;
+            background-color: #fffcf4;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding-bottom: 90px; /* 為底部 NAV 留空間 */
+        }
+
+        /* 隱藏滾動條 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* 圓形進度環動畫風格 */
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* 助理人物超出一角彈出效果 */
+        .ai-assistant-img {
+            filter: drop-shadow(0px 8px 12px rgba(47, 85, 55, 0.15));
+        }
+
+        /* 互動微動畫 */
+        .touch-active:active {
+            transform: scale(0.97);
+            transition: transform 0.1s ease;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+
+    <div class="app-viewport">
+        
+        <!-- 頂部 Header 區塊 (Logo與頭像) -->
+        <header class="px-5 pt-6 pb-2 flex items-center justify-between bg-[#fffcf4]">
+            <!-- 左側品牌 Logo -->
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-7">
+                    <svg class="w-full h-full text-brand" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 32 62 C 22 62 16 52 24 40 C 35 24 50 14 74 14 C 92 14 100 24 100 36 C 100 44 94 48 84 48 C 76 48 68 56 68 62" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 46 28 C 42 38 42 54 48 56 C 54 58 58 48 54 36" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="80" cy="30" r="4.5" fill="currentColor"/>
+                    </svg>
+                </div>
+                <span class="text-xl font-black text-brand italic tracking-tight" style="font-style: italic;">YongGO</span>
+            </div>
+
+            <!-- 右上雙圓形頭像 (飼主頭像 + 狗狗頭像) -->
+            <div class="flex items-center -space-x-2">
+                <!-- 飼主頭像 -->
+                <div class="w-10 h-10 rounded-full border-2 border-[#fffcf4] overflow-hidden shadow-sm bg-brand-light flex items-center justify-center relative z-10">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="飼主頭像" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/e4edd1/2f5537?text=Owner'">
+                </div>
+                <!-- 狗狗頭像 -->
+                <div class="w-10 h-10 rounded-full border-2 border-[#fffcf4] overflow-hidden shadow-sm bg-brand-pinkSoft flex items-center justify-center relative z-20">
+                    <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=150&q=80" alt="狗狗頭像" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/F9D3CE/2f5537?text=Dog'">
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要內容區域 (四個重點橫向矩形區塊與模組) -->
+        <main class="px-5 py-3 space-y-5 flex-1">
+
+            <!-- 區塊 1: 每天 6 分鐘區 (參考手機畫面視覺設計) -->
+            <section class="bg-brand-light rounded-app p-4 shadow-sm border border-brand/5 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="font-extrabold text-brand text-lg flex items-center gap-1.5">
+                        <i class="fa-solid fa-stopwatch text-brand-pink"></i> 每天6分鐘訓練
+                    </h2>
+                    <span class="text-xs bg-white px-2.5 py-1 rounded-full text-brand font-bold shadow-2xs">今日未完成</span>
+                </div>
+
+                <div class="flex items-center justify-between my-2">
+                    <!-- 左側可愛狗狗圖 -->
+                    <div class="w-28 h-28 relative flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=300&q=80" alt="訓練中的狗狗" class="w-24 h-24 object-cover rounded-full border-2 border-white shadow-md">
+                    </div>
+
+                    <!-- 右側 6分鐘計時與播放鈕 -->
+                    <div class="relative w-32 h-32 flex items-center justify-center">
+                        <!-- 圓形進度條 SVG -->
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" stroke="#F9D3CE" stroke-width="8" fill="none" />
+                            <circle cx="50" cy="50" r="40" stroke="#F19689" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="60" stroke-linecap="round" class="progress-ring-circle" />
+                        </svg>
+                        <div class="absolute flex flex-col items-center justify-center text-center">
+                            <span class="text-xs text-brand/70 font-bold">今日目標</span>
+                            <div class="flex items-baseline">
+                                <span class="text-2xl font-black text-brand">6</span>
+                                <span class="text-xs font-bold text-brand ml-0.5">分鐘</span>
+                            </div>
+                            <!-- 播放按鈕 -->
+                            <button onclick="triggerAction('開始 6 分鐘訓練')" class="mt-1 w-9 h-9 rounded-full bg-brand-pink text-white flex items-center justify-center shadow-md touch-active">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 備註說明：點擊 2-4 個月狗狗訓練進度 -->
+                <button onclick="triggerAction('檢視 8 週訓練循環計畫')" class="w-full mt-2 py-2 px-3 bg-white/80 hover:bg-white rounded-app-sm flex items-center justify-between text-xs text-brand font-bold transition-all border border-brand/10 touch-active">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-[#2f5537] fa-calendar-check text-brand"></i> 
+                        2-4個月幼犬訓練進度 (8週循環)
+                    </span>
+                    <i class="fa-solid fa-chevron-right text-brand/40 text-xs"></i>
+                </button>
+            </section>
+
+            <!-- 區塊 2: 常用任務 -->
+            <section class="space-y-2">
+                <div class="flex items-center justify-between px-1">
+                    <h3 class="text-sm font-extrabold text-brand">常用任務快捷</h3>
+                    <span class="text-xs text-brand/60">一鍵開始</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2.5">
+                    <!-- 任務 1: 坐下 -->
+                    <button onclick="triggerAction('開始：坐下訓練')" class="bg-white p-3 rounded-app-sm border border-brand-light flex flex-col items-center justify-between shadow-2xs touch-active h-24">
+                        <span class="text-sm font-bold text-brand">坐下</span>
+                        <div class="w-8 h-8 rounded-full bg-brand-light text-brand flex items-center justify-center">
+                            <i class="fa-solid fa-play text-xs ml-0.5"></i>
+                        </div>
+                    </button>
+
+                    <!-- 任務 2: 安靜 -->
+                    <button onclick="triggerAction('開始：安靜訓練')" class="bg-white p-3 rounded-app-sm border border-brand-light flex flex-col items-center justify-between shadow-2xs touch-active h-24">
+                        <span class="text-sm font-bold text-brand">安靜</span>
+                        <div class="w-8 h-8 rounded-full bg-brand-light text-brand flex items-center justify-center">
+                            <i class="fa-solid fa-play text-xs ml-0.5"></i>
+                        </div>
+                    </button>
+
+                    <!-- 任務 3: 尿尿 -->
+                    <button onclick="triggerAction('開始：定點定時尿尿訓練')" class="bg-white p-3 rounded-app-sm border border-brand-light flex flex-col items-center justify-between shadow-2xs touch-active h-24">
+                        <span class="text-sm font-bold text-brand">尿尿</span>
+                        <div class="w-8 h-8 rounded-full bg-brand-light text-brand flex items-center justify-center">
+                            <i class="fa-solid fa-play text-xs ml-0.5"></i>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 區塊 3: AI帥助教 (上半身超出大矩形圓角) -->
+            <section class="relative pt-12">
+                <!-- 人物上半身超出大矩形 (使用您提供的助教圖片) -->
+                <div class="absolute -top-4 right-2 w-36 h-44 z-10 pointer-events-none">
+                    <img src="ai_asistant.png" alt="AI 帥助教" class="w-full h-full object-contain object-bottom ai-assistant-img" onerror="this.src='https://placehold.co/200x300/2f5537/fffcf4?text=AI+Coach'">
+                </div>
+
+                <!-- 大矩形容器 -->
+                <div class="bg-brand text-white rounded-app p-4 pt-5 shadow-md relative z-0 overflow-hidden">
+                    <div class="w-2/3 space-y-2">
+                        <div class="inline-block bg-brand-pink text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold tracking-wide">
+                            AI 諮詢顧問
+                        </div>
+                        <h3 class="text-base font-black tracking-wide leading-tight">AI 帥助教在線上</h3>
+                        <p class="text-xs text-brand-light/90 leading-snug">
+                            暖心助教回答你任何狗狗的問題！
+                        </p>
+
+                        <!-- Bar 1: 幼犬黃金成長期 -->
+                        <div onclick="triggerAction('查看：幼犬黃金成長期指南')" class="bg-white/10 hover:bg-white/20 p-2 rounded-app-sm flex items-center justify-between cursor-pointer border border-white/15 touch-active">
+                            <span class="text-xs font-bold text-brand-cream flex items-center gap-1.5">
+                                <i class="fa-solid fa-bone text-brand-pinkSoft text-xs"></i> 幼犬黃金成長期
+                            </span>
+                            <i class="fa-solid fa-angle-right text-xs text-brand-light"></i>
+                        </div>
+
+                        <!-- Bar 2: 教養心法 -->
+                        <div onclick="triggerAction('查看：專業教養心法')" class="bg-white/10 hover:bg-white/20 p-2 rounded-app-sm flex items-center justify-between cursor-pointer border border-white/15 touch-active">
+                            <span class="text-xs font-bold text-brand-cream flex items-center gap-1.5">
+                                <i class="fa-solid fa-heart text-brand-pink text-xs"></i> 養狗教養心法
+                            </span>
+                            <i class="fa-solid fa-angle-right text-xs text-brand-light"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 區塊 4: 健康日誌區 -->
+            <section onclick="triggerAction('開啟健康日誌紀錄')" class="bg-white rounded-app p-4 shadow-sm border border-brand-light flex items-center justify-between cursor-pointer touch-active">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-12 h-12 rounded-app-sm bg-brand-pinkSoft text-brand-pink flex items-center justify-center text-xl shadow-2xs">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-brand text-base">健康日誌區</h3>
+                        <p class="text-xs text-gray-500 font-medium">拍照寫下狗狗的成長點滴...</p>
+                    </div>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand">
+                    <i class="fa-solid fa-camera text-sm"></i>
+                </div>
+            </section>
+
+            <!-- 區塊 5: 闖關機制 (等級與成就卡片) -->
+            <section class="bg-white rounded-app p-4 shadow-sm border border-brand-light space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-7 h-7 rounded-full bg-brand text-white flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="font-extrabold text-brand text-base">闖關進度等級</h3>
+                    </div>
+                    <span class="text-xs font-extrabold text-brand-pink bg-brand-pinkSoft/40 px-2.5 py-1 rounded-full">
+                        LV. 2 成長中
+                    </span>
+                </div>
+
+                <!-- 卡片身份：養育銅牌專家卡 -->
+                <div class="bg-gradient-to-br from-[#d49a6a] to-[#a86c3d] text-white p-4 rounded-app-sm shadow-md relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 opacity-20 text-white text-7xl">
+                        <i class="fa-solid fa-paw"></i>
+                    </div>
+                    
+                    <div class="flex justify-between items-start relative z-10">
+                        <div>
+                            <span class="text-[10px] tracking-wider uppercase opacity-80 font-bold block">CURRENT RANK</span>
+                            <h4 class="text-lg font-black tracking-wide">養育銅牌專家</h4>
+                        </div>
+                        <!-- 銅狗腳印 Icon -->
+                        <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white text-xl">
+                            <i class="fa-solid fa-paw"></i>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-2 border-t border-white/20 flex items-center justify-between text-xs relative z-10">
+                        <span class="font-bold opacity-90">飼主：Alex (狗狗: 豆豆)</span>
+                        <span class="bg-black/20 px-2 py-0.5 rounded-full font-mono">ID: #YG-8839</span>
+                    </div>
+                </div>
+
+                <!-- 進度備註 -->
+                <div class="bg-brand-cream p-3 rounded-app-sm border border-brand/5 space-y-1.5">
+                    <div class="flex justify-between text-xs font-bold text-brand">
+                        <span>距離升級「銀牌專家」</span>
+                        <span class="text-brand-pink font-extrabold">還差 18 次</span>
+                    </div>
+                    <!-- 進度條 -->
+                    <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                        <div class="bg-brand-pink h-full rounded-full" style="width: 64%;"></div>
+                    </div>
+                    <p class="text-[11px] text-gray-500 text-right font-medium">
+                        目標：完成 <strong class="text-brand">50 次</strong> 6分鐘訓練 (目前 32/50)
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- 固定底部 Navigation (深綠色 Icon 5區) -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-[390px] mx-auto bg-white border-t border-gray-100 px-3 py-2 flex justify-around items-center z-50 rounded-t-2xl shadow-lg">
+            
+            <!-- 1. 首頁 (Active) -->
+            <button onclick="switchNav(this, '首頁')" class="flex flex-col items-center py-1 px-3 text-brand font-black">
+                <i class="fa-solid fa-house text-xl mb-0.5"></i>
+                <span class="text-[11px]">首頁</span>
+            </button>
+
+            <!-- 2. 訓練 -->
+            <button onclick="switchNav(this, '訓練')" class="flex flex-col items-center py-1 px-3 text-brand/50 hover:text-brand font-bold transition-colors">
+                <i class="fa-solid fa-[#2f5537] fa-bone text-xl mb-0.5"></i>
+                <span class="text-[11px]">訓練</span>
+            </button>
+
+            <!-- 3. 紀錄 -->
+            <button onclick="switchNav(this, '紀錄')" class="flex flex-col items-center py-1 px-3 text-brand/50 hover:text-brand font-bold transition-colors">
+                <i class="fa-regular fa-clipboard text-xl mb-0.5"></i>
+                <span class="text-[11px]">紀錄</span>
+            </button>
+
+            <!-- 4. AI助教 -->
+            <button onclick="switchNav(this, 'AI助教')" class="flex flex-col items-center py-1 px-3 text-brand/50 hover:text-brand font-bold transition-colors relative">
+                <i class="fa-solid fa-robot text-xl mb-0.5"></i>
+                <span class="text-[11px]">AI助教</span>
+                <!-- 小紅點提示 -->
+                <span class="absolute top-1 right-3 w-2 h-2 bg-brand-pink rounded-full"></span>
+            </button>
+
+            <!-- 5. 我的 -->
+            <button onclick="switchNav(this, '我的')" class="flex flex-col items-center py-1 px-3 text-brand/50 hover:text-brand font-bold transition-colors">
+                <i class="fa-regular fa-user text-xl mb-0.5"></i>
+                <span class="text-[11px]">我的</span>
+            </button>
+
+        </nav>
+
+    </div>
+
+    <!-- 自訂軟圓彈窗對話框 (無系統 alert) -->
+    <div id="app-modal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-200">
+        <div id="modal-card" class="bg-[#fffcf4] rounded-app p-5 w-4/5 max-w-xs text-center shadow-2xl border-2 border-brand-light transform scale-90 transition-transform duration-200">
+            <div class="w-12 h-12 bg-brand-light text-brand rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                <i class="fa-solid fa-paw"></i>
+            </div>
+            <h4 id="modal-title" class="text-base font-extrabold text-brand mb-1.5">提示</h4>
+            <p id="modal-msg" class="text-xs text-gray-600 mb-5 font-medium leading-relaxed">訊息內容...</p>
+            <button onclick="closeAppModal()" class="w-full py-2.5 bg-brand hover:bg-brand-dark text-white font-bold text-sm rounded-app-sm shadow-sm touch-active">
+                我知道了
+            </button>
+        </div>
+    </div>
+
+    <!-- 頁面邏輯 JS -->
+    <script>
+        // 模擬按鈕與卡片點擊觸發
+        function triggerAction(actionName) {
+            showAppModal('操作提示', `您點擊了「${actionName}」功能。`);
+        }
+
+        // 底部 NAV 切換視覺體驗
+        function switchNav(element, name) {
+            const allNavs = element.parentElement.querySelectorAll('button');
+            allNavs.forEach(nav => {
+                nav.className = 'flex flex-col items-center py-1 px-3 text-brand/50 hover:text-brand font-bold transition-colors';
+            });
+            element.className = 'flex flex-col items-center py-1 px-3 text-brand font-black';
+            showAppModal('頁面切換', `切換至「${name}」分頁`);
+        }
+
+        // 顯示對話框
+        function showAppModal(title, message) {
+            const modal = document.getElementById('app-modal');
+            const card = document.getElementById('modal-card');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-msg').textContent = message;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-90');
+            card.classList.add('scale-100');
+        }
+
+        // 關閉對話框
+        function closeAppModal() {
+            const modal = document.getElementById('app-modal');
+            const card = document.getElementById('modal-card');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-90');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+    </script>
+</body>
+</html>
